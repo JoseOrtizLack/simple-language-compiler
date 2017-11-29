@@ -1,6 +1,7 @@
 /**
  * symbolTable.h
  * Definition of the structure to build a symbol table
+ * @author Jose Pablo Ortiz Lack
  */
 
 #ifndef __SYMBOL_TABLE_H__
@@ -29,7 +30,7 @@ typedef struct tagSymbol {
 
     } value; //value of the symbol
 
-    struct tagSymbol* next; //next element of the symbol table
+    struct tagSymbol *next; //next element of the symbol table
 
 } Symbol;
 
@@ -40,7 +41,7 @@ typedef struct tagSymbol {
  * @param identifier identifier of the symbol to be added
  * @param value integer value of the symbol to be added
  */
-void insertIntegerSymbol(Symbol** headRef, tagSymbolType type, char* identifier, int value);
+int insertIntegerSymbol(Symbol *headRef, SymbolType type, char *identifier, int value);
 
 /**
  * @brief inserts a new float symbol at the end of the list
@@ -48,15 +49,16 @@ void insertIntegerSymbol(Symbol** headRef, tagSymbolType type, char* identifier,
  * @param type type of symbol to be added
  * @param identifier identifier of the symbol to be added
  * @param value float value of the symbol to be added
+ * @return 1 if the symbol was added successfully, 0 if there was an error adding the symbol
  */
-void insertFloatSymbol(Symbol* headRef, tagSymbolType type, char* identifier, int value);
+int insertFloatSymbol(Symbol *headRef, SymbolType type, char *identifier, int value);
 
 /**
  * @brief finds the last symbol in the list
  * @param headRef reference to the head of the table
  * @return the last symbol or NULL if there is no symbols in the table
  */
-Symbol* getLastSymbol(Symbol* headRef);
+Symbol *getLastSymbol(Symbol *headRef);
 
 /**
  * @brief searches a symbol by identifier
@@ -64,16 +66,7 @@ Symbol* getLastSymbol(Symbol* headRef);
  * @param identifier identifier of the symbol
  * @return the searched symbol or NULL if there is no symbol with this identifier
  */
-Symbol* findSymbol(Symbol* headRef);
-
-
-
-
-
-
-
-
-
+Symbol *findSymbol(Symbol *headRef, char *identifier);
 
 #endif //__SYMBOL_TABLE_H__
 
