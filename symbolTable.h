@@ -5,7 +5,6 @@
 
 #ifndef __SYMBOL_TABLE_H__
 #define __SYMBOL_TABLE_H__
-#include <stdlib.h>
 /**
  * @brief The symbol type
  */
@@ -28,9 +27,9 @@ typedef struct tagSymbol {
         int iValue; //integer value
         float fValue; //float value
 
-        struct tagSymbol* next; //next element of the symbol table
-
     } value; //value of the symbol
+
+    struct tagSymbol* next; //next element of the symbol table
 
 } Symbol;
 
