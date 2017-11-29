@@ -39,7 +39,7 @@ typedef struct tagSymbol {
  * @param headRef reference to the head of the table
  * @param type type of symbol to be added
  * @param identifier identifier of the symbol to be added
- * @param value integer value of the symbol to be added
+  * @return  0 if there was an error adding the symbol, 1 if the symbol was added successfully, or 2 if the symbool already exists
  */
 int insertIntegerSymbol(Symbol *headRef, SymbolType type, char *identifier, int value);
 
@@ -49,7 +49,7 @@ int insertIntegerSymbol(Symbol *headRef, SymbolType type, char *identifier, int 
  * @param type type of symbol to be added
  * @param identifier identifier of the symbol to be added
  * @param value float value of the symbol to be added
- * @return 1 if the symbol was added successfully, 0 if there was an error adding the symbol
+ * @return  0 if there was an error adding the symbol, 1 if the symbol was added successfully, or 2 if the symbool already exists
  */
 int insertFloatSymbol(Symbol *headRef, SymbolType type, char *identifier, int value);
 
