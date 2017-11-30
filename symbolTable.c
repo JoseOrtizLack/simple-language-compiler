@@ -126,3 +126,46 @@ Symbol *findSymbol( Symbol **head, char *identifier ) {
     }
     return result; //If the search criteria is not met, return NULL
 }
+
+int updateIntegerSymbol( Symbol **head, char *identifier, int newValue ) {
+
+    //verify the table is not empty
+    if( *head == NULL ) {
+
+        return 0;
+    }
+
+    Symbol *updateSymbol = findSymbol( head, identifier ); //Search the symbol to be updated
+
+    if( updateSymbol == NULL ) { //The symbol was not found
+
+        return 0;
+    }
+
+    updateSymbol->value.iValue = newValue;
+
+    return 1;
+
+}
+
+int updateFloatSymbol( Symbol **head, char *identifier, float newValue ) {
+
+    //verify the table is not empty
+    if( *head == NULL ) {
+
+        return 0;
+    }
+
+    Symbol *updateSymbol = findSymbol( head, identifier ); //Search the symbol to be updated
+
+    if( updateSymbol == NULL ) { //The symbol was not found
+
+        return 0;
+    }
+
+    updateSymbol->value.fValue = newValue;
+
+    return 1;
+
+}
+
