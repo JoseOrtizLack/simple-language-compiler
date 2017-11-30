@@ -10,8 +10,8 @@
  * @brief The symbol type
  */
 typedef enum tagSymbolType {
-    tInt,
-    tFloat
+    INTEGER,
+    FLOAT
 } SymbolType;
 
 /**
@@ -19,7 +19,7 @@ typedef enum tagSymbolType {
  */
 typedef struct tagSymbol {
 
-    tagSymbolType type; //type of symbol
+    SymbolType type; //type of symbol
     
     char* identifier; //name of the symbol
     
@@ -41,7 +41,7 @@ typedef struct tagSymbol {
  * @param identifier identifier of the symbol to be added
   * @return  0 if there was an error adding the symbol, 1 if the symbol was added successfully, or 2 if the symbool already exists
  */
-int insertIntegerSymbol(Symbol *headRef, SymbolType type, char *identifier, int value);
+int insertIntegerSymbol(Symbol **headRef, SymbolType type, char *identifier, int value);
 
 /**
  * @brief inserts a new float symbol at the end of the list
@@ -51,14 +51,14 @@ int insertIntegerSymbol(Symbol *headRef, SymbolType type, char *identifier, int 
  * @param value float value of the symbol to be added
  * @return  0 if there was an error adding the symbol, 1 if the symbol was added successfully, or 2 if the symbool already exists
  */
-int insertFloatSymbol(Symbol *headRef, SymbolType type, char *identifier, int value);
+int insertFloatSymbol(Symbol **headRef, SymbolType type, char *identifier, int value);
 
 /**
  * @brief finds the last symbol in the list
  * @param headRef reference to the head of the table
  * @return the last symbol or NULL if there is no symbols in the table
  */
-Symbol *getLastSymbol(Symbol *headRef);
+Symbol *getLastSymbol(Symbol **headRef);
 
 /**
  * @brief searches a symbol by identifier
@@ -66,7 +66,7 @@ Symbol *getLastSymbol(Symbol *headRef);
  * @param identifier identifier of the symbol
  * @return the searched symbol or NULL if there is no symbol with this identifier
  */
-Symbol *findSymbol(Symbol *headRef, char *identifier);
+Symbol *findSymbol(Symbol **headRef, char *identifier);
 
 #endif //__SYMBOL_TABLE_H__
 

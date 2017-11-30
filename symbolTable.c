@@ -7,6 +7,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 /**
  * @brief Allocates space for the Symbol
@@ -26,23 +27,27 @@ static Symbol *allocateSymbol() {
 
 }
 
-int insertIntegerSymbol( Symbol *headRef, SymbolType type, char *identifier, int value ) {
+int insertIntegerSymbol( Symbol **headRef, SymbolType type, char *identifier, int value ) {
 
-    if( findSymbol( headRef, identifier ) != NULL ) {
+    Symbol *exists = findSymbol( headRef, identifier );
 
-        Symbol *last = getLastSymbol( headRef ); //We search for the last symbol in the table
+    if( exists == NULL ) {
 
         Symbol *new = allocateSymbol();
 
         if ( new != NULL ) {
 
-            if ( last == NULL ) { //The table is empty
+            if ( *headRef == NULL ) { //The table is empty
 
                 //Make the new symbol head of the table
-                headRef = new;
+                ( *headRef ) = new;
+                new->next = NULL;
 
             } else { //The table has at least one symbol
-                last->next = new;
+               
+                new->next = (*headRef);
+
+                (*headRef) = new;
             }
 
             new->type = type;
@@ -53,8 +58,6 @@ int insertIntegerSymbol( Symbol *headRef, SymbolType type, char *identifier, int
 
             new->value.iValue = value;
 
-            new->next = NULL;
-
             return 1;
 
         } else { //There was an error assigning memory to the new symbol
@@ -69,23 +72,26 @@ int insertIntegerSymbol( Symbol *headRef, SymbolType type, char *identifier, int
 
 }
 
-int insertFloatSymbol( Symbol *headRef, SymbolType type, char *identifier, int value ) {
+int insertFloatSymbol( Symbol **headRef, SymbolType type, char *identifier, int value ) {
 
-    if( findSymbol( headRef, identifier ) != NULL ) {
+    Symbol *exists = findSymbol( headRef, identifier );
 
-        Symbol *last = getLastSymbol( headRef ); //We search for the last symbol in the table
+    if( exists == NULL ) {
 
         Symbol *new = allocateSymbol();
 
         if ( new != NULL ) {
 
-            if ( last == NULL ) { //The table is empty
+            if ( *headRef == NULL ) { //The table is empty
 
                 //Make the new symbol head of the table
-                headRef = new;
+                (*headRef) = new;
 
             } else { //The table has at least one symbol
-                last->next = new;
+                
+                new->next = (*headRef);
+                
+                (*headRef) = new;
             }
 
             new->type = type;
@@ -96,8 +102,6 @@ int insertFloatSymbol( Symbol *headRef, SymbolType type, char *identifier, int v
 
             new->value.fValue = value;
 
-            new->next = NULL;
-
             return 1;
 
         } else { //There was an error assigning memory to the new symbol
@@ -112,41 +116,18 @@ int insertFloatSymbol( Symbol *headRef, SymbolType type, char *identifier, int v
 
 }
 
-Symbol *getLastSymbol( Symbol *headRef ) {
+Symbol *findSymbol( Symbol **headRef, char *identifier ) {
 
-    Symbol *last; //we declare the last symbol to be returned
-
-    last = headRef; //We start at the head of the symbol table
-
-    while ( last != NULL ) { //We traverse the table until the end
-
-        if ( last->next == NULL ) { //We have reached the last symbol in the table
-
-            return last; //Return the last symbol
-
-        }
-
-        last = last->next; //Move on to the next symbol
-
-    }
-
-    return NULL; //The table is empty
-
-}
-
-Symbol *findSymbol( Symbol *headRef, char *identifier ) {
-
-    Symbol *result = headRef; //We start searching at the beginning of the table
+    Symbol *result =  *headRef; //We start searching at the beginning of the table
     
     while ( result != NULL ) { //Traverse the complete table
-
+    
         if(strcmp(result->identifier, identifier) == 0) { //If the identifier of the current node matches the search criteria
-         
             return result;
 
         }
+        result = result->next;
     }
-
-    return NULL; //If the search criteria is not met, return NULL
+    return result; //If the search criteria is not met, return NULL
 }
 
