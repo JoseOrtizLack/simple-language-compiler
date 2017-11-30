@@ -27,30 +27,28 @@ static Symbol *allocateSymbol() {
 
 }
 
-int insertIntegerSymbol( Symbol **headRef, SymbolType type, char *identifier, int value ) {
+int insertIntegerSymbol( Symbol **head, char *identifier, int value ) {
 
-    Symbol *exists = findSymbol( headRef, identifier );
-
-    if( exists == NULL ) {
+    if( findSymbol( head, identifier ) == NULL ) {
 
         Symbol *new = allocateSymbol();
 
         if ( new != NULL ) {
 
-            if ( *headRef == NULL ) { //The table is empty
+            if ( *head == NULL ) { //The table is empty
 
                 //Make the new symbol head of the table
-                ( *headRef ) = new;
+                ( *head ) = new;
                 new->next = NULL;
 
             } else { //The table has at least one symbol
                
-                new->next = (*headRef);
+                new->next = (*head);
 
-                (*headRef) = new;
+                (*head) = new;
             }
 
-            new->type = type;
+            new->type = INTEGER;
             
             //reserve memory for the identifier and copy the identifier to the new symbol
             new->identifier = malloc((strlen(identifier)+1)*sizeof(char));
@@ -72,29 +70,27 @@ int insertIntegerSymbol( Symbol **headRef, SymbolType type, char *identifier, in
 
 }
 
-int insertFloatSymbol( Symbol **headRef, SymbolType type, char *identifier, int value ) {
+int insertFloatSymbol( Symbol **head, char *identifier, float value ) {
 
-    Symbol *exists = findSymbol( headRef, identifier );
-
-    if( exists == NULL ) {
+    if( findSymbol( head, identifier ) == NULL ) {
 
         Symbol *new = allocateSymbol();
 
         if ( new != NULL ) {
 
-            if ( *headRef == NULL ) { //The table is empty
+            if ( *head == NULL ) { //The table is empty
 
                 //Make the new symbol head of the table
-                (*headRef) = new;
+                (*head) = new;
 
             } else { //The table has at least one symbol
                 
-                new->next = (*headRef);
+                new->next = (*head);
                 
-                (*headRef) = new;
+                (*head) = new;
             }
 
-            new->type = type;
+            new->type = FLOAT;
             
             //reserve memory for the identifier and copy the identifier to the new symbol
             new->identifier = malloc((strlen(identifier)+1)*sizeof(char));
@@ -116,9 +112,9 @@ int insertFloatSymbol( Symbol **headRef, SymbolType type, char *identifier, int 
 
 }
 
-Symbol *findSymbol( Symbol **headRef, char *identifier ) {
+Symbol *findSymbol( Symbol **head, char *identifier ) {
 
-    Symbol *result =  *headRef; //We start searching at the beginning of the table
+    Symbol *result =  *head; //We start searching at the beginning of the table
     
     while ( result != NULL ) { //Traverse the complete table
     
@@ -130,4 +126,3 @@ Symbol *findSymbol( Symbol **headRef, char *identifier ) {
     }
     return result; //If the search criteria is not met, return NULL
 }
-
