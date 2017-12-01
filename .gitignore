@@ -1,2 +1,8 @@
 .vscode
 test*
+Lexer.c
+Lexer.h
+Parser.c
+Parser.h
+*.out
+*.exe
