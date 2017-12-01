@@ -123,6 +123,13 @@ Node *createInteger( int value );
 Node *createFloat( float value );
 
 /**
+ * @brief creates a minus one node to multiply against a right operand, of either integer or float type
+ * @param rightOperand operand against which the minus node will be multiplied
+ * @return integer or float node with a value of minus one, depending on the right operand
+ */
+Node *createMinus( Node *rightOperand );
+
+/**
  * @brief creates symbol Node
  * @param value value of the symbol
  * @param symbolTable symbol table of the compiler
