@@ -7,6 +7,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 /**
  * @brief Allocates space for the Symbol
@@ -35,7 +36,7 @@ int insertSymbol( Symbol **head, char *identifier , SymbolType type) {
         if ( new != NULL ) {
 
             if ( *head == NULL ) { //The table is empty
-
+                
                 //Make the new symbol head of the table
                 *head = new;
                 new->next = NULL;
@@ -53,16 +54,30 @@ int insertSymbol( Symbol **head, char *identifier , SymbolType type) {
             new->identifier = malloc( ( strlen( identifier ) + 1 ) * sizeof( char ) );
             strcpy( new->identifier, identifier );
 
+            if(type == INTEGER) {
+
+                new->value.iValue = 0;
+
+            } else if(type == FLOAT) {
+
+                new->value.fValue = 0.0;
+            }
+
             return 1;
 
         } else { //There was an error assigning memory to the new symbol
-
-            return 0;
+            
+            printf("Error: Memory allocation failed. Program will be terminated\n");
+            exit(1);
+            //return 0;
+            
         }
 
     } else {
 
-        return 2; //A symbol with the same identifier was found
+        printf("Error: Symbol to be inserted already exists. Program will be terminated\n");
+        exit(1);
+        //return 2; //A symbol with the same identifier was found
     }
 
 }
@@ -74,11 +89,14 @@ Symbol *findSymbol( Symbol **head, char *identifier ) {
     while ( result != NULL ) { //Traverse the complete table
     
         if( strcmp( result->identifier, identifier ) == 0 ) { //If the identifier of the current node matches the search criteria
+            
             return result;
 
         }
+
         result = result->next;
     }
+
     return result; //If the search criteria is not met, return NULL
 }
 
@@ -86,15 +104,17 @@ int setIntegerSymbolValue( Symbol **head, char *identifier, int newValue ) {
 
     //verify the table is not empty
     if( *head == NULL ) {
-
-        return 0;
+        printf("Error: Cannot assign value to undeclared symbol. Program will be terminated\n");
+        exit(1);
+        //return 0;
     }
 
     Symbol *updateSymbol = findSymbol( head, identifier ); //Search the symbol to be updated
 
     if( updateSymbol == NULL ) { //The symbol was not found
-
-        return 0;
+        printf("Error: Cannot assign value to undeclared symbol. Program will be terminated\n");
+        exit(1);
+        //return 0;
     }
 
     updateSymbol->value.iValue = newValue;
@@ -107,15 +127,18 @@ int setFloatSymbolValue( Symbol **head, char *identifier, float newValue ) {
 
     //verify the table is not empty
     if( *head == NULL ) {
-
-        return 0;
+        
+        printf("Error: Cannot assign value to undeclared symbol. Program will be terminated\n");
+        exit(1);
+        //return 0;
     }
 
     Symbol *updateSymbol = findSymbol( head, identifier ); //Search the symbol to be updated
 
     if( updateSymbol == NULL ) { //The symbol was not found
-
-        return 0;
+        printf("Error: Cannot assign value to undeclared symbol. Program will be terminated\n");
+        exit(1);
+        //return 0;
     }
 
     updateSymbol->value.fValue = newValue;
@@ -128,15 +151,17 @@ int getIntegerSymbolValue( Symbol **head, char *identifier ) {
 
     //verify the table is not empty
     if( *head == NULL ) {
-
-        return 0;
+        printf("Error: Cannot obtain value from undeclared symbol. Program will be terminated\n");
+        exit(1);
+        //return 0;
     }
 
     Symbol *symbol = findSymbol( head, identifier ); //Search the symbol to get the value from
 
     if( symbol == NULL ) { //The symbol was not found
-
-        return 0;
+        printf("Error: Cannot obtain value from undeclared symbol. Program will be terminated\n");
+        exit(1);
+        //return 0;
     }
 
     return symbol->value.iValue;
@@ -147,15 +172,17 @@ float getFloatSymbolValue( Symbol **head, char *identifier ) {
 
     //verify the table is not empty
     if( *head == NULL ) {
-
-        return 0;
+        printf("Error: Cannot obtain value from undeclared symbol. Program will be terminated\n");
+        exit(1);
+        //return 0;
     }
 
     Symbol *symbol = findSymbol( head, identifier ); //Search the symbol to get the value from
 
     if( symbol == NULL ) { //The symbol was not found
-
-        return 0;
+        printf("Error: Cannot obtain value from undeclared symbol. Program will be terminated\n");
+        exit(1);
+        //return 0;
     }
 
     return symbol->value.fValue;
@@ -166,15 +193,17 @@ SymbolType getSymbolType( Symbol **head, char * identifier) {
 
     //verify the table is not empty
     if( *head == NULL ) {
-
-        return 0;
+        printf("Error: Cannot obtain symbol type from undeclared symbol. Program will be terminated\n");
+        exit(1);
+        //return 0;
     }
 
     Symbol *symbol = findSymbol( head, identifier ); //Search the symbol to get the value from
 
     if( symbol == NULL ) { //The symbol was not found
-
-        return 0;
+        printf("Error: Cannot obtain symbol type from undeclared symbol. Program will be terminated\n");
+        exit(1);
+        //return 0;
     }
 
     return symbol->type;
