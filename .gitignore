@@ -6,3 +6,5 @@ Parser.c
 Parser.h
 *.out
 *.exe
+compiler
+*.txt
