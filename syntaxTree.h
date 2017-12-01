@@ -11,7 +11,9 @@
  * @brief The node type
  */
 typedef enum tagNodeType {
+
     nVALUE,
+    nSYMBOLTYPE,
     nOPERATION,
     nEXPRESION,
     nSEMICOLON,
@@ -22,6 +24,7 @@ typedef enum tagNodeType {
     nFOR,
     nREAD,
     nPRINT
+    
 } NodeType;
 
 /**
@@ -60,6 +63,7 @@ typedef struct tagNode {
     /********** EXPR | TERM | FACTOR components **********/
     OperationType operationType; //Type of operation (see OperationType ENUM)
     SymbolType valueType; //type of value (see SymbolType ENUM) of the expresion or value
+    
     union {
 
         int iValue; //integer value
@@ -67,6 +71,7 @@ typedef struct tagNode {
         char *idValue; //symbol value
 
     } value; //value (if Operand)
+    
     struct tagNode *leftOperand; //left operand of the operation
     struct tagNode *rightOperand; //right operand of the operation
 
@@ -138,6 +143,13 @@ Node *createMinus( Node *rightOperand );
 Node *createSymbol( char *value , Symbol **symbolTable );
 
 /**
+ * @brief creates a symbol type Node
+ * param symbolType type of symbol
+ * @returns symbol type node
+ */
+Node *createSymbolType( SymbolType symbolType );
+
+/**
  * @brief verifies that the symbol types of two operands match. If they don't match an error message is sent and the program is closed
  * @param leftOperand tye symbol type of the left operand
  * @param rightOperand tye symbol type of the right operand
@@ -152,7 +164,7 @@ SymbolType assertSymbolType( SymbolType leftOperand , SymbolType rightOperand );
  * @param rightOperand the right operand of the operation
  * @return operation tree
  */
-Node *createOperation( OperationType operationType, Node *leftOperand, Node *rightOperand);
+Node *createOperation( OperationType operationType , Node *leftOperand , Node *rightOperand);
 
 /**
  * @brief creates expresion tree
@@ -161,7 +173,7 @@ Node *createOperation( OperationType operationType, Node *leftOperand, Node *rig
  * @param rightOperand the right operand of the expresion
  * @return expresion tree
  */
-Node *createExpresion( ExpresionType expresionType, Node *leftOperand, Node *rightOperand);
+Node *createExpresion( ExpresionType expresionType , Node *leftOperand , Node *rightOperand );
 
 /**
  * @brief creates semicolon tree
@@ -169,7 +181,7 @@ Node *createExpresion( ExpresionType expresionType, Node *leftOperand, Node *rig
  * @param rightStatement the right statement of the semicolon
  * @return semicolon tree
  */
-Node *createSemiColon( Node *leftStatement, Node *rightStatement );
+Node *createSemiColon( Node *leftStatement , Node *rightStatement );
 
 /**
  * @brief creates assignment statement tree
@@ -178,7 +190,7 @@ Node *createSemiColon( Node *leftStatement, Node *rightStatement );
  * @param symbolTable symbol table of the compiler
  * @return assignment statement tree
  */
-Node *createAssignment( char *identifier, Node *expr , Symbol **symbolTable);
+Node *createAssignment( char *identifier , Node *expr , Symbol **symbolTable );
 
 /**
  * @brief creates if statement tree
@@ -186,7 +198,7 @@ Node *createAssignment( char *identifier, Node *expr , Symbol **symbolTable);
  * @param then_opt_stmts optional statements to be resolved if condition is proven true
  * @return if statement tree
  */
-Node *createIfStatement( Node *expresion, Node *thenOptStmts );
+Node *createIfStatement( Node *expresion , Node *thenOptStmts );
 
 /**
  * @brief creates if statement tree
@@ -194,7 +206,7 @@ Node *createIfStatement( Node *expresion, Node *thenOptStmts );
  * @param do_opt_stmts optional statements to be executed in a loop while condition is proven true
  * @return while statement tree
  */
-Node *createWhileStatement( Node *expresion, Node *doOptStmts );
+Node *createWhileStatement( Node *expresion , Node *doOptStmts );
 
 /**
  * @brief creates for loop statement tree
@@ -205,7 +217,7 @@ Node *createWhileStatement( Node *expresion, Node *doOptStmts );
  * @param doOptStmts optional statements to be executed inside the for loop
  * @return for statement tree
  */
-Node *createForStatement( char *identifier, Node *expr, Node *stepExpr, Node *untilExpr, Node *doOptStmts );
+Node *createForStatement( char *identifier , Node *expr , Node *stepExpr , Node *untilExpr , Node *doOptStmts );
 
 /**
  * @brief creates read statement tree
@@ -250,7 +262,7 @@ int evaluateExpresion(Node *expresion , Symbol **symbolTable );
  * @param identifier identifier of the symbol whose value is to be assigned
  * @param expr expresion to be evaluated and assigned to the symbol
  */
-void assignSymbol( char *identifier, Node *expr , Symbol **symbolTable , SymbolType symbolType);
+void assignSymbol( char *identifier , Node *expr , Symbol **symbolTable , SymbolType symbolType);
 
 /**
  * @brief resolves the syntactic tree
@@ -260,4 +272,6 @@ void assignSymbol( char *identifier, Node *expr , Symbol **symbolTable , SymbolT
  */
 int resolveTree( Node *tree , Symbol **symbolTable);
 
-#endif
+#endif //__SYNTAX_TREE_H__
+
+//end syntaxtTree.h

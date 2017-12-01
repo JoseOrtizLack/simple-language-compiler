@@ -18,9 +18,9 @@ static Node *allocateNode() {
 
     Node *node = malloc( sizeof( Node ) );
 
-    if(node == NULL) {
+    if ( node == NULL ) {
 
-        printf("Error: Memory allocation failed. Program will be terminated\n");
+        printf( "Error: Memory allocation failed. Program will be terminated\n" );
         exit(1);
 
     }
@@ -32,10 +32,11 @@ Node * createInteger( int value ) {
 
     Node *nInteger = allocateNode();
 
-    nInteger->type = nVALUE;
+    nInteger->type          = nVALUE;
+
     nInteger->operationType = oINTEGER;
-    nInteger->symbolType = sINTEGER;
-    nInteger->value.iValue = value;
+    nInteger->symbolType    = sINTEGER;
+    nInteger->value.iValue  = value;
     
     return nInteger;
 
@@ -45,10 +46,11 @@ Node * createFloat( float value ) {
 
     Node *nFloat = allocateNode();
 
-    nFloat->type = nVALUE;
+    nFloat->type          = nVALUE;
+
     nFloat->operationType = oFLOAT;
-    nFloat->symbolType = sFLOAT;
-    nFloat->value.fValue = value;
+    nFloat->symbolType    = sFLOAT;
+    nFloat->value.fValue  = value;
     
     return nFloat;
 
@@ -60,21 +62,21 @@ Node *createMinus( Node *rightOperand ) {
 
     nMinus->type = nVALUE;
 
-    switch(rightOperand->symbolType) {
+    switch ( rightOperand->symbolType ) {
 
         case sINTEGER:
 
-            nMinus->symbolType = sINTEGER;
+            nMinus->symbolType    = sINTEGER;
             nMinus->operationType = oINTEGER;
-            nMinus->value.iValue = -1;
+            nMinus->value.iValue  = -1;
 
         break;
         
         case sFLOAT:
 
-            nMinus->symbolType = sFLOAT;
+            nMinus->symbolType    = sFLOAT;
             nMinus->operationType = oFLOAT;
-            nMinus->value.fValue = -1.0;
+            nMinus->value.fValue  = -1.0;
 
         break;
 
@@ -88,24 +90,36 @@ Node * createSymbol( char  *value , Symbol **symbolTable) {
 
     Node *nSymbol = allocateNode();
 
-    nSymbol->type = nVALUE;
+    nSymbol->type          = nVALUE;
+
     nSymbol->operationType = oID;
-    nSymbol->symbolType = getSymbolType( symbolTable , value );
+    nSymbol->symbolType    = getSymbolType( symbolTable , value );
     nSymbol->value.idValue = value;
     
     return nSymbol;
 
 }
 
+Node *createSymbolType( SymbolType symbolType ) {
+
+    Node *nSymbolType = allocateNode();
+
+    nSymbolType->type       = nSYMBOLTYPE;
+
+    nSymbolType->symbolType = symbolType;
+
+    return nSymbolType;
+}
+
 SymbolType assertSymbolType( SymbolType leftOperand , SymbolType rightOperand ) {
 
-    if( leftOperand == rightOperand ) { //both operand symbol types match
+    if ( leftOperand == rightOperand ) { //both operand symbol types match
 
         return leftOperand;
 
     } else { //operands do not match, print error and exit program
 
-        printf("Error: types do not match\n");
+        printf( "Error: Types do not match. Program will be terminated.\n" );
 
         exit(1); //We exit the program as there was an error
     }
@@ -115,15 +129,12 @@ Node *createOperation( OperationType operationType , Node *leftOperand , Node *r
 
     Node *nOperation = allocateNode();
 
-    nOperation->type = nOPERATION;
+    nOperation->type          = nOPERATION;
 
-    nOperation->symbolType = assertSymbolType( leftOperand->symbolType , rightOperand->symbolType ); //if assert fails compiler will terminate
-
+    nOperation->symbolType    = assertSymbolType( leftOperand->symbolType , rightOperand->symbolType ); //if assert fails compiler will terminate
     nOperation->operationType = operationType;
-
-    nOperation->leftOperand = leftOperand;
-
-    nOperation->rightOperand = rightOperand;
+    nOperation->leftOperand   = leftOperand;
+    nOperation->rightOperand  = rightOperand;
 
     return nOperation;
 
@@ -133,28 +144,24 @@ Node *createExpresion( ExpresionType expresionType , Node *leftOperand , Node *r
 
     Node *nExpresion = allocateNode();
 
-    nExpresion->type = nEXPRESION;
-    
-    nExpresion->symbolType = assertSymbolType( leftOperand->symbolType , rightOperand->symbolType ); //if assert fails compiler will terminate
+    nExpresion->type          = nEXPRESION;
 
+    nExpresion->symbolType    = assertSymbolType( leftOperand->symbolType , rightOperand->symbolType ); //if assert fails compiler will terminate
     nExpresion->expresionType = expresionType;
-
-    nExpresion->leftOperand = leftOperand;
-
-    nExpresion->rightOperand = rightOperand;
+    nExpresion->leftOperand   = leftOperand;
+    nExpresion->rightOperand  = rightOperand;
 
     return nExpresion;
 
 }
 
-Node *createSemiColon( Node *leftStatement, Node *rightStatement ) {
+Node *createSemiColon( Node *leftStatement , Node *rightStatement ) {
 
     Node *nSemicolon = allocateNode();
 
-    nSemicolon->type = nSEMICOLON;
+    nSemicolon->type           = nSEMICOLON;
 
-    nSemicolon->leftStatement = leftStatement;
-
+    nSemicolon->leftStatement  = leftStatement;
     nSemicolon->rightStatement = rightStatement;
 
     return nSemicolon;
@@ -165,9 +172,10 @@ Node *createAssignment( char *identifier , Node *expr , Symbol **symbolTable ) {
 
     Node *nAssignment = allocateNode();
 
-    nAssignment->type = nASSIGNMENT;
-    nAssignment->symbolType = assertSymbolType( expr->symbolType , getSymbolType( symbolTable , identifier ) );
-    nAssignment->expr = expr;
+    nAssignment->type          = nASSIGNMENT;
+
+    nAssignment->symbolType    = assertSymbolType( expr->symbolType , getSymbolType( symbolTable , identifier ) );
+    nAssignment->expr          = expr;
     nAssignment->value.idValue = identifier;
 
     return nAssignment;
@@ -178,22 +186,22 @@ Node *createIfStatement( Node *expresion , Node *thenOptStmts ) {
 
     Node *nIfStatement = allocateNode();
 
-    nIfStatement->type = nIF;
+    nIfStatement->type         = nIF;
 
-    nIfStatement->expresion = expresion;
+    nIfStatement->expresion    = expresion;
     nIfStatement->thenOptStmts = thenOptStmts;
 
     return nIfStatement;
 
 }
 
-Node *createWhileStatement( Node *expresion, Node *doOptStmts ) {
+Node *createWhileStatement( Node *expresion , Node *doOptStmts ) {
 
     Node *nWhileStatement = allocateNode();
 
-    nWhileStatement->type = nWHILE;
+    nWhileStatement->type       = nWHILE;
 
-    nWhileStatement->expresion = expresion;
+    nWhileStatement->expresion  = expresion;
     nWhileStatement->doOptStmts = doOptStmts;
 
     return nWhileStatement;
@@ -204,13 +212,13 @@ Node *createForStatement( char *identifier , Node *expr , Node *stepExpr , Node 
 
     Node *nForStatement = allocateNode();
 
-    nForStatement->type = nFOR;
+    nForStatement->type          = nFOR;
 
     nForStatement->value.idValue = identifier;
-    nForStatement->expr = expr;
-    nForStatement->stepExpr = stepExpr;
-    nForStatement->untilExpr = untilExpr;
-    nForStatement->doOptStmts = doOptStmts;
+    nForStatement->expr          = expr;
+    nForStatement->stepExpr      = stepExpr;
+    nForStatement->untilExpr     = untilExpr;
+    nForStatement->doOptStmts    = doOptStmts;
 
     return nForStatement;
 
@@ -220,7 +228,7 @@ Node *createReadStatement( char *identifier ) {
 
     Node *nReadStatement = allocateNode();
 
-    nReadStatement->type = nREAD;
+    nReadStatement->type          = nREAD;
 
     nReadStatement->value.idValue = identifier;
 
@@ -244,21 +252,27 @@ int evaluateIntegerOperation( Node *operation , Symbol **symbolTable) {
     switch ( operation->operationType ) {
         
         case oINTEGER:
+
             return operation->value.iValue;
 
         case oID:
+
             return getIntegerSymbolValue( symbolTable , operation->value.idValue);
         
         case oSUM:
+
             return evaluateIntegerOperation( operation->leftOperand , symbolTable ) + evaluateIntegerOperation( operation->rightOperand , symbolTable );
         
         case oSUB:
+
             return evaluateIntegerOperation( operation->leftOperand , symbolTable ) - evaluateIntegerOperation( operation->rightOperand , symbolTable );
         
         case oMULT:
+
             return evaluateIntegerOperation( operation->leftOperand , symbolTable ) * evaluateIntegerOperation( operation->rightOperand , symbolTable );
         
         case oDIV:
+
             return evaluateIntegerOperation( operation->leftOperand , symbolTable ) / evaluateIntegerOperation( operation->rightOperand , symbolTable );
         
         default:
@@ -274,21 +288,27 @@ float evaluateFloatOperation( Node *operation , Symbol **symbolTable) {
     switch (operation->operationType) {
         
         case oFLOAT:
+
             return operation->value.fValue;
 
         case oID:
+
             return getFloatSymbolValue( symbolTable , operation->value.idValue);
         
         case oSUM:
+
             return evaluateFloatOperation( operation->leftOperand , symbolTable ) + evaluateFloatOperation( operation->rightOperand , symbolTable );
         
         case oSUB:
+
             return evaluateFloatOperation( operation->leftOperand , symbolTable ) - evaluateFloatOperation( operation->rightOperand , symbolTable );
         
         case oMULT:
+
             return evaluateFloatOperation( operation->leftOperand , symbolTable ) * evaluateFloatOperation( operation->rightOperand , symbolTable );
         
         case oDIV:
+
             return evaluateFloatOperation( operation->leftOperand , symbolTable ) / evaluateFloatOperation( operation->rightOperand , symbolTable );
         
         default:
@@ -301,19 +321,19 @@ float evaluateFloatOperation( Node *operation , Symbol **symbolTable) {
 
 int evaluateExpresion(Node *expresion , Symbol **symbolTable ) {
 
-    switch( expresion->expresionType ) {
+    switch ( expresion->expresionType ) {
 
         case eGREATER_THAN:
 
-            switch( expresion->symbolType ) {
+            switch ( expresion->symbolType ) {
 
                 case sINTEGER:
 
-                    return evaluateIntegerOperation(expresion->leftOperand , symbolTable ) > evaluateIntegerOperation(expresion->rightOperand  , symbolTable );
+                    return evaluateIntegerOperation( expresion->leftOperand , symbolTable ) > evaluateIntegerOperation( expresion->rightOperand  , symbolTable );
 
                 case sFLOAT:
 
-                    return evaluateFloatOperation(expresion->leftOperand , symbolTable ) > evaluateFloatOperation(expresion->rightOperand  , symbolTable );
+                    return evaluateFloatOperation( expresion->leftOperand , symbolTable ) > evaluateFloatOperation( expresion->rightOperand  , symbolTable );
 
                 default:
                     // should not be here
@@ -323,15 +343,15 @@ int evaluateExpresion(Node *expresion , Symbol **symbolTable ) {
 
         case eLESS_THAN:
 
-            switch( expresion->symbolType ) {
+            switch ( expresion->symbolType ) {
 
                 case sINTEGER:
 
-                    return evaluateIntegerOperation(expresion->leftOperand , symbolTable ) < evaluateIntegerOperation(expresion->rightOperand  , symbolTable );
+                    return evaluateIntegerOperation( expresion->leftOperand , symbolTable ) < evaluateIntegerOperation( expresion->rightOperand  , symbolTable );
 
                 case sFLOAT:
 
-                    return evaluateFloatOperation(expresion->leftOperand , symbolTable ) < evaluateFloatOperation(expresion->rightOperand  , symbolTable );
+                    return evaluateFloatOperation( expresion->leftOperand , symbolTable ) < evaluateFloatOperation( expresion->rightOperand  , symbolTable );
 
                 default:
                     // should not be here
@@ -341,15 +361,15 @@ int evaluateExpresion(Node *expresion , Symbol **symbolTable ) {
 
         case eEQUAL_TO:
 
-            switch( expresion->symbolType ) {
+            switch ( expresion->symbolType ) {
 
                 case sINTEGER:
 
-                    return evaluateIntegerOperation(expresion->leftOperand , symbolTable ) == evaluateIntegerOperation(expresion->rightOperand  , symbolTable );
+                    return evaluateIntegerOperation( expresion->leftOperand , symbolTable ) == evaluateIntegerOperation( expresion->rightOperand  , symbolTable );
 
                 case sFLOAT:
 
-                    return evaluateFloatOperation(expresion->leftOperand , symbolTable ) == evaluateFloatOperation(expresion->rightOperand  , symbolTable );
+                    return evaluateFloatOperation( expresion->leftOperand , symbolTable ) == evaluateFloatOperation( expresion->rightOperand  , symbolTable );
 
                 default:
                     // should not be here
@@ -364,20 +384,21 @@ int evaluateExpresion(Node *expresion , Symbol **symbolTable ) {
     }
 }
 
-int resolveTree( Node *tree, Symbol **symbolTable) {
-
-    switch( tree->type ) {
+int resolveTree( Node *tree , Symbol **symbolTable) {
+    
+    switch ( tree->type ) {
 
         case nSEMICOLON:
-
+            
             resolveTree( tree->leftStatement, symbolTable );
+            
             resolveTree( tree->rightStatement, symbolTable );
 
         break;
 
         case nASSIGNMENT:
 
-            switch( tree->symbolType ) {
+            switch ( tree->symbolType ) {
 
                 case sINTEGER:
                     
@@ -387,7 +408,7 @@ int resolveTree( Node *tree, Symbol **symbolTable) {
                 
                 case sFLOAT:
                     
-                    setFloatSymbolValue( symbolTable , tree->value.idValue , evaluateIntegerOperation( tree->expr , symbolTable ) );
+                    setFloatSymbolValue( symbolTable , tree->value.idValue , evaluateFloatOperation( tree->expr , symbolTable ) );
                 
                 break;
 
@@ -403,18 +424,18 @@ int resolveTree( Node *tree, Symbol **symbolTable) {
         break;
 
         case nIF:
+            
+            if ( evaluateExpresion( tree->expresion , symbolTable ) ) {
 
-            if( evaluateExpresion( tree->expresion , symbolTable ) ) {
-
-                resolveTree( tree->thenOptStmts, symbolTable );
+                resolveTree( tree->thenOptStmts , symbolTable );
 
             }
         
         break;
 
         case nWHILE:
-
-            while( evaluateExpresion( tree->expresion , symbolTable ) ) {
+            
+            while ( evaluateExpresion( tree->expresion , symbolTable ) ) {
 
                 resolveTree( tree->doOptStmts , symbolTable );
 
@@ -431,23 +452,45 @@ int resolveTree( Node *tree, Symbol **symbolTable) {
             assertSymbolType( symbolType , tree->stepExpr->symbolType );
             assertSymbolType( symbolType , tree->untilExpr->symbolType );
 
-            switch(symbolType) {
+            switch (symbolType) {
 
                 case sINTEGER: {
 
                     //resolve expr and assign to symbol
-                    int integerIterator = evaluateIntegerOperation( tree->expr , symbolTable );
-                    int integerStep = evaluateIntegerOperation( tree->stepExpr , symbolTable );
-                    int integerUntil = evaluateIntegerOperation( tree->stepExpr , symbolTable );
-                    
-                    setIntegerSymbolValue( symbolTable, tree->value.idValue , integerIterator );
+                    int integerStart = evaluateIntegerOperation( tree->expr , symbolTable );
+                    int integerStep  = evaluateIntegerOperation( tree->stepExpr , symbolTable );
+                    int integerUntil = evaluateIntegerOperation( tree->untilExpr , symbolTable );
+                    int integerIterator;
+                    setIntegerSymbolValue( symbolTable , tree->value.idValue , integerStart );
 
-                    do {
+                    if ( integerStep < 0 ) {
+                        
+                        for ( integerIterator = integerStart ; integerIterator >= integerUntil ; integerIterator += integerStep ) {
 
-                        resolveTree( tree-> doOptStmts , symbolTable );
-                        integerIterator += integerStep;
-                        setIntegerSymbolValue( symbolTable, tree->value.idValue , integerIterator ); //updates the symbol value with the step value
-                    } while( integerIterator <= integerUntil);
+                            setIntegerSymbolValue( symbolTable , tree->value.idValue , integerIterator); //updates the symbol value with the step value
+                            
+                            resolveTree( tree-> doOptStmts , symbolTable );
+
+                        }
+
+                        setIntegerSymbolValue( symbolTable, tree->value.idValue , integerIterator - integerStep); //updates the symbol value with the step value
+
+                    } else if ( integerStep > 0 ) {
+                        
+                        for ( integerIterator = integerStart ; integerIterator <= integerUntil ; integerIterator += integerStep ) {
+
+                            setIntegerSymbolValue( symbolTable , tree->value.idValue , integerIterator); //updates the symbol value with the step value
+                            
+                            resolveTree( tree-> doOptStmts , symbolTable );
+                        }
+
+                         setIntegerSymbolValue( symbolTable , tree->value.idValue , integerIterator - integerStep); //updates the symbol value with the step value
+
+                    } else {
+
+                        printf( "Error: Step cannot be 0.0 . Program will be terminated.\n" );
+                        exit(1);
+                    }
 
                     break;
                 }
@@ -455,19 +498,40 @@ int resolveTree( Node *tree, Symbol **symbolTable) {
                 case sFLOAT: {
 
                     //resolve expr and assign to symbol
-                    float floatIterator = evaluateFloatOperation( tree->expr , symbolTable );
-                    float floatStep = evaluateFloatOperation( tree->stepExpr , symbolTable );
-                    float floatUntil = evaluateFloatOperation( tree->stepExpr , symbolTable );
+                    float floatStart = evaluateFloatOperation( tree->expr , symbolTable );
+                    float floatStep  = evaluateFloatOperation( tree->stepExpr , symbolTable );
+                    float floatUntil = evaluateFloatOperation( tree->untilExpr , symbolTable );
+                    float floatIterator;
                     
-                    setIntegerSymbolValue( symbolTable, tree->value.idValue , floatIterator );
+                    setFloatSymbolValue( symbolTable, tree->value.idValue , floatStart );
+                    if ( floatStep < 0 ) {
+                        
+                        for ( floatIterator = floatStart ; floatIterator >= floatUntil ; floatIterator += floatStep ) {
 
-                    do {
+                            setFloatSymbolValue( symbolTable, tree->value.idValue , floatIterator); //updates the symbol value with the step value
+                            
+                            resolveTree( tree-> doOptStmts , symbolTable );
 
-                        resolveTree( tree-> doOptStmts , symbolTable );
+                        }
 
-                        floatIterator += floatStep;
-                        setFloatSymbolValue( symbolTable, tree->value.idValue , floatIterator ); //updates the symbol value with the step value
-                    } while( floatIterator <= floatUntil);
+                        setFloatSymbolValue( symbolTable, tree->value.idValue , floatIterator - floatStep); //updates the symbol value by removing the excess step
+
+                    } else if ( floatStep > 0 ) {
+                        
+                        for (floatIterator = floatStart ; floatIterator <= floatUntil ; floatIterator += floatStep ) {
+  
+                            setFloatSymbolValue( symbolTable, tree->value.idValue , floatIterator ); //updates the symbol value with the step value
+                            
+                            resolveTree( tree-> doOptStmts , symbolTable );
+                        }
+
+                        setFloatSymbolValue( symbolTable, tree->value.idValue , floatIterator - floatStep ); //updates the symbol by removing the excess step
+
+                    } else {
+
+                        printf( "Error: Step cannot be 0.0 . Program will be terminated.\n" );
+                        exit(1);
+                    } 
 
                     break;
                 }
@@ -479,12 +543,18 @@ int resolveTree( Node *tree, Symbol **symbolTable) {
 
         case nREAD:
 
-            switch( getSymbolType( symbolTable , tree->value.idValue ) ) {
+            switch ( getSymbolType( symbolTable , tree->value.idValue ) ) {
 
                 case sINTEGER: {
-
+                    
+                    printf( "read value for %s: ", tree->value.idValue );
+                    
                     int value;
+                    
                     scanf( "%d" , &value );
+                    
+                    printf( "\n" );
+
                     setIntegerSymbolValue( symbolTable, tree->value.idValue , value );
 
                     break;
@@ -493,7 +563,12 @@ int resolveTree( Node *tree, Symbol **symbolTable) {
                 case sFLOAT: {
 
                     float value;
+
+                    printf( "read value for %s: ", tree->value.idValue );
                     scanf( "%f" , &value );
+                    
+                    printf( "\n" );
+                    
                     setFloatSymbolValue( symbolTable, tree->value.idValue , value );
 
                     break;
@@ -503,8 +578,8 @@ int resolveTree( Node *tree, Symbol **symbolTable) {
         break;
 
         case nPRINT:
-
-            switch( getSymbolType( symbolTable , tree->expr->value.idValue ) ) {
+            
+            switch ( getSymbolType( symbolTable , tree->expr->value.idValue ) ) {
 
                 case sINTEGER:
 
@@ -533,3 +608,5 @@ int resolveTree( Node *tree, Symbol **symbolTable) {
     return 1;
 
 }
+
+//end syntaxTree.c

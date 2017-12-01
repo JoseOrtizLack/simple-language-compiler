@@ -22,13 +22,13 @@ typedef enum tagSymbolType {
  */
 typedef struct tagSymbol {
 
-    SymbolType type; //type of symbol
+    SymbolType  type; //type of symbol
     
     char* identifier; //name of the symbol
     
     union {
 
-        int iValue; //integer value
+        int   iValue; //integer value
         float fValue; //float value
 
     } value; //value of the symbol
@@ -45,7 +45,7 @@ typedef struct tagSymbol {
  * @param identifier identifier of the symbol to be added
   * @return  1 if the symbol was added successfully
  */
-int insertSymbol( Symbol **head, char *identifier, SymbolType type);
+int insertSymbol( Symbol **head , char *identifier , SymbolType type );
 
 /**
  * @brief searches a symbol by identifier
@@ -53,7 +53,7 @@ int insertSymbol( Symbol **head, char *identifier, SymbolType type);
  * @param identifier identifier of the symbol
  * @return the searched symbol or NULL if there is no symbol with this identifier
  */
-Symbol *findSymbol( Symbol **head, char *identifier );
+Symbol *findSymbol( Symbol **head , char *identifier );
 
 
 /**
@@ -64,7 +64,7 @@ Symbol *findSymbol( Symbol **head, char *identifier );
  * @param newValue updated value of the symbol
  * @return 1 if the update was sucessful
  */
-int setIntegerSymbolValue( Symbol **head, char *identifier, int newValue );
+int setIntegerSymbolValue( Symbol **head , char *identifier , int newValue );
 
 /**
  * @brief updates the value of an integer symbol
@@ -74,7 +74,7 @@ int setIntegerSymbolValue( Symbol **head, char *identifier, int newValue );
  * @param newValue updated value of the symbol
  * @return 0 if the symbol was not found, 1 if the update was sucessful
  */
-int setFloatSymbolValue( Symbol **head, char *identifier , float newValue);
+int setFloatSymbolValue( Symbol **head , char *identifier , float newValue );
 
 /**
  * @brief obtains the value of an integer symbol
@@ -83,7 +83,7 @@ int setFloatSymbolValue( Symbol **head, char *identifier , float newValue);
  * @param identifier identifier of the symbol
  * @return the integer value of the symbol
  */
-int getIntegerSymbolValue( Symbol **head, char *identifier );
+int getIntegerSymbolValue( Symbol **head , char *identifier );
 
 /**
  * @brief obtains the value of a float symbol
@@ -92,7 +92,7 @@ int getIntegerSymbolValue( Symbol **head, char *identifier );
  * @param identifier identifier of the symbol
  * @return the float value of the symbol
  */
-float getFloatSymbolValue( Symbol **head, char *identifier );
+float getFloatSymbolValue( Symbol **head , char *identifier );
 
 /**
  * @brief obtains the symbol type of a symbol
@@ -101,10 +101,10 @@ float getFloatSymbolValue( Symbol **head, char *identifier );
  * @param identifier identifier of the symbol
  * @return the symbol type of the symbol
  */
-SymbolType getSymbolType( Symbol **head, char * identifier);
+SymbolType getSymbolType( Symbol **head , char * identifier);
 
 #endif //__SYMBOL_TABLE_H__
 
-
+//end symbolTable.h
 
 
