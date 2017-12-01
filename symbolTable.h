@@ -12,8 +12,8 @@
  */
 typedef enum tagSymbolType {
 
-    INTEGER,
-    FLOAT
+    sINTEGER,
+    sFLOAT
 
 } SymbolType;
 

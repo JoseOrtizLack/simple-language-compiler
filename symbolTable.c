@@ -54,11 +54,11 @@ int insertSymbol( Symbol **head, char *identifier , SymbolType type) {
             new->identifier = malloc( ( strlen( identifier ) + 1 ) * sizeof( char ) );
             strcpy( new->identifier, identifier );
 
-            if(type == INTEGER) {
+            if(type == sINTEGER) {
 
                 new->value.iValue = 0;
 
-            } else if(type == FLOAT) {
+            } else if(type == sFLOAT) {
 
                 new->value.fValue = 0.0;
             }
