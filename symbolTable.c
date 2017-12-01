@@ -7,7 +7,6 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
 
 /**
  * @brief Allocates space for the Symbol
@@ -27,7 +26,7 @@ static Symbol *allocateSymbol() {
 
 }
 
-int insertIntegerSymbol( Symbol **head, char *identifier, int value ) {
+int insertSymbol( Symbol **head, char *identifier , SymbolType type) {
 
     if( findSymbol( head, identifier ) == NULL ) {
 
@@ -38,65 +37,21 @@ int insertIntegerSymbol( Symbol **head, char *identifier, int value ) {
             if ( *head == NULL ) { //The table is empty
 
                 //Make the new symbol head of the table
-                ( *head ) = new;
+                *head = new;
                 new->next = NULL;
 
             } else { //The table has at least one symbol
                
-                new->next = (*head);
+                new->next = *head;
 
-                (*head) = new;
+                *head = new;
             }
 
-            new->type = INTEGER;
+            new->type = type;
             
             //reserve memory for the identifier and copy the identifier to the new symbol
-            new->identifier = malloc((strlen(identifier)+1)*sizeof(char));
-            strcpy(new->identifier,identifier);
-
-            new->value.iValue = value;
-
-            return 1;
-
-        } else { //There was an error assigning memory to the new symbol
-
-            return 0;
-        }
-
-    } else {
-
-        return 2; //A symbol with the same identifier was found
-    }
-
-}
-
-int insertFloatSymbol( Symbol **head, char *identifier, float value ) {
-
-    if( findSymbol( head, identifier ) == NULL ) {
-
-        Symbol *new = allocateSymbol();
-
-        if ( new != NULL ) {
-
-            if ( *head == NULL ) { //The table is empty
-
-                //Make the new symbol head of the table
-                (*head) = new;
-
-            } else { //The table has at least one symbol
-                
-                new->next = (*head);
-                
-                (*head) = new;
-            }
-
-            new->type = FLOAT;
-            
-            //reserve memory for the identifier and copy the identifier to the new symbol
-            new->identifier = malloc((strlen(identifier)+1)*sizeof(char));
-            strcpy(new->identifier,identifier);
-
-            new->value.fValue = value;
+            new->identifier = malloc( ( strlen( identifier ) + 1 ) * sizeof( char ) );
+            strcpy( new->identifier, identifier );
 
             return 1;
 
@@ -118,7 +73,7 @@ Symbol *findSymbol( Symbol **head, char *identifier ) {
     
     while ( result != NULL ) { //Traverse the complete table
     
-        if(strcmp(result->identifier, identifier) == 0) { //If the identifier of the current node matches the search criteria
+        if( strcmp( result->identifier, identifier ) == 0 ) { //If the identifier of the current node matches the search criteria
             return result;
 
         }
@@ -127,7 +82,7 @@ Symbol *findSymbol( Symbol **head, char *identifier ) {
     return result; //If the search criteria is not met, return NULL
 }
 
-int updateIntegerSymbol( Symbol **head, char *identifier, int newValue ) {
+int setIntegerSymbolValue( Symbol **head, char *identifier, int newValue ) {
 
     //verify the table is not empty
     if( *head == NULL ) {
@@ -148,7 +103,7 @@ int updateIntegerSymbol( Symbol **head, char *identifier, int newValue ) {
 
 }
 
-int updateFloatSymbol( Symbol **head, char *identifier, float newValue ) {
+int setFloatSymbolValue( Symbol **head, char *identifier, float newValue ) {
 
     //verify the table is not empty
     if( *head == NULL ) {
@@ -166,6 +121,63 @@ int updateFloatSymbol( Symbol **head, char *identifier, float newValue ) {
     updateSymbol->value.fValue = newValue;
 
     return 1;
+
+}
+
+int getIntegerSymbolValue( Symbol **head, char *identifier ) {
+
+    //verify the table is not empty
+    if( *head == NULL ) {
+
+        return 0;
+    }
+
+    Symbol *symbol = findSymbol( head, identifier ); //Search the symbol to get the value from
+
+    if( symbol == NULL ) { //The symbol was not found
+
+        return 0;
+    }
+
+    return symbol->value.iValue;
+
+}
+
+float getFloatSymbolValue( Symbol **head, char *identifier ) {
+
+    //verify the table is not empty
+    if( *head == NULL ) {
+
+        return 0;
+    }
+
+    Symbol *symbol = findSymbol( head, identifier ); //Search the symbol to get the value from
+
+    if( symbol == NULL ) { //The symbol was not found
+
+        return 0;
+    }
+
+    return symbol->value.fValue;
+
+}
+
+SymbolType getSymbolType( Symbol **head, char * identifier) {
+
+    //verify the table is not empty
+    if( *head == NULL ) {
+
+        return 0;
+    }
+
+    Symbol *symbol = findSymbol( head, identifier ); //Search the symbol to get the value from
+
+    if( symbol == NULL ) { //The symbol was not found
+
+        return 0;
+    }
+
+    return symbol->type;
 
 }
 

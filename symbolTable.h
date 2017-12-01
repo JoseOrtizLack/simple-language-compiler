@@ -11,8 +11,10 @@
  * @brief The symbol type
  */
 typedef enum tagSymbolType {
+
     INTEGER,
     FLOAT
+
 } SymbolType;
 
 /**
@@ -42,24 +44,7 @@ typedef struct tagSymbol {
  * @param identifier identifier of the symbol to be added
   * @return  0 if there was an error adding the symbol, 1 if the symbol was added successfully, or 2 if the symbol already exists
  */
-int insertIntegerSymbol( Symbol **head, char *identifier, int value );
-
-/**
- * @brief inserts a new float symbol at the end of the list
- * @param head reference to the head of the table
- * @param type type of symbol to be added
- * @param identifier identifier of the symbol to be added
- * @param value float value of the symbol to be added
- * @return  0 if there was an error adding the symbol, 1 if the symbol was added successfully, or 2 if the symbol already exists
- */
-int insertFloatSymbol( Symbol **head, char *identifier, float value );
-
-/**
- * @brief finds the last symbol in the list
- * @param head reference to the head of the table
- * @return the last symbol or NULL if there is no symbols in the table
- */
-Symbol *getLastSymbol( Symbol **head );
+int insertSymbol( Symbol **head, char *identifier, SymbolType type);
 
 /**
  * @brief searches a symbol by identifier
@@ -77,7 +62,7 @@ Symbol *findSymbol( Symbol **head, char *identifier );
  * @param newValue updated value of the symbol
  * @return 0 if the symbol was not found, 1 if the update was sucessful
  */
-int updateIntegerSymbol( Symbol **head, char *identifier, int newValue );
+int setIntegerSymbolValue( Symbol **head, char *identifier, int newValue );
 
 /**
  * @brief updates the value of an integer symbol
@@ -86,7 +71,31 @@ int updateIntegerSymbol( Symbol **head, char *identifier, int newValue );
  * @param newValue updated value of the symbol
  * @return 0 if the symbol was not found, 1 if the update was sucessful
  */
-int updateFloatSymbol( Symbol **head, char *identifier, float newValue );
+int setFloatSymbolValue( Symbol **head, char *identifier , float newValue);
+
+/**
+ * @brief obtains the value of an integer symbol
+ * @param head reference to the head of the table
+ * @param identifier identifier of the symbol
+ * @return the integer value of the symbol
+ */
+int getIntegerSymbolValue( Symbol **head, char *identifier );
+
+/**
+ * @brief obtains the value of a float symbol
+ * @param head reference to the head of the table
+ * @param identifier identifier of the symbol
+ * @return the float value of the symbol
+ */
+float getFloatSymbolValue( Symbol **head, char *identifier );
+
+/**
+ * @brief obtains the symbol type of a symbol
+ * @param head reference to the head of the table
+ * @param identifier identifier of the symbol
+ * @return the symbol type of the symbol
+ */
+SymbolType getSymbolType( Symbol **head, char * identifier);
 
 #endif //__SYMBOL_TABLE_H__
 
