@@ -578,11 +578,11 @@ int resolveTree( Node *tree , Symbol **symbolTable) {
         break;
 
         case nPRINT:
-            
-            switch ( getSymbolType( symbolTable , tree->expr->value.idValue ) ) {
+
+            switch ( tree->expr->symbolType ) {
 
                 case sINTEGER:
-
+                
                     printf ( "%d\n" , evaluateIntegerOperation( tree->expr , symbolTable ) );
 
                 break;
